@@ -3,6 +3,11 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
+from datetime import datetime
+import uuid 
+
+from flask import request 
+
 from flask import render_template, redirect, request, url_for
 from flask_login import (
     current_user,
@@ -14,7 +19,7 @@ from flask_dance.contrib.github import github
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
-from apps.authentication.models import Users
+from apps.authentication.models import Users, Users_Sessions
 
 from apps.authentication.util import verify_pass
 
@@ -57,8 +62,20 @@ def login():
 
         # Check the password
         if verify_pass(password, user.password):
-
+            n = datetime.now()
             login_user(user)
+            user.loggedon = n
+            Users.save (user)
+            session = Users_Sessions()
+            session.user_id = user.id 
+            session.id = str(uuid.uuid4())
+            session.ip_address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            session.platform = request.user_agent.platform
+            session.browser = request.user_agent.browser
+            session.version = request.user_agent.version
+            session.loggedon = n 
+            Users_Sessions.save(session) 
+
             return redirect(url_for('authentication_blueprint.route_default'))
 
         # Something (user or pass) is not ok
@@ -98,6 +115,8 @@ def register():
 
         # else we can create the user
         user = Users(**request.form)
+        user.id = str(uuid.uuid4())
+        user.created = datetime.now()
         db.session.add(user)
         db.session.commit()
 

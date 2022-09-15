@@ -14,8 +14,14 @@ class Config(object):
     SECRET_KEY = os.getenv('SECRET_KEY', 'S#perS3crEt_007')
 
     # This will create a file in <app> FOLDER
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+    SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/pbts' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
+
+    # Google Authentication
+    GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", '158772789153-lorcgam41b9je27csg5lf3u4mdhg9npj.apps.googleusercontent.com')
+    GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", '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')
+    GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
 
     # Assets Management
     ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')    

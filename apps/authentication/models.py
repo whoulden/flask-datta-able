@@ -3,9 +3,13 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
+import uuid 
+
 from flask_login import UserMixin
 
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship 
+from sqlalchemy import exc
+from flask_sqlalchemy import SQLAlchemy
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 
 from apps import db, login_manager
@@ -16,11 +20,16 @@ class Users(db.Model, UserMixin):
 
     __tablename__ = 'users'
 
-    id            = db.Column(db.Integer, primary_key=True)
+    # id            = db.Column(db.Integer, primary_key=True)
+    id            = db.Column(db.String(36), primary_key=True)
     username      = db.Column(db.String(64), unique=True)
     email         = db.Column(db.String(64), unique=True)
     password      = db.Column(db.LargeBinary)
-
+    firstname     = db.Column(db.String(64), unique=False)
+    lastname      = db.Column(db.String(64), unique=False)
+    loggedon      = db.Column(db.DateTime, unique=False)
+    created       = db.Column(db.DateTime, unique=False)
+    
     oauth_github  = db.Column(db.String(100), nullable=True)
 
     def __init__(self, **kwargs):
@@ -52,31 +61,40 @@ class Users(db.Model, UserMixin):
     def find_by_id(cls, _id: int) -> "Users":
         return cls.query.filter_by(id=_id).first()
    
+    def update(self) -> None:
+        db.session.flush()
+        db.session.commit()
+          
+
     def save(self) -> None:
         try:
             db.session.add(self)
             db.session.commit()
           
-        except SQLAlchemyError as e:
+        except exc.SQLAlchemyError as e:
             db.session.rollback()
             db.session.close()
             error = str(e.__dict__['orig'])
-            raise InvalidUsage(error, 422)
+            raise exc.InvalidUsage(error, 422)
     
     def delete_from_db(self) -> None:
         try:
             db.session.delete(self)
             db.session.commit()
-        except SQLAlchemyError as e:
+        except exc.SQLAlchemyError as e:
             db.session.rollback()
             db.session.close()
             error = str(e.__dict__['orig'])
-            raise InvalidUsage(error, 422)
+            raise exc.InvalidUsage(error, 422)
         return
 
 @login_manager.user_loader
 def user_loader(id):
-    return Users.query.filter_by(id=id).first()
+    #if int(id) > 0:
+    n = Users.query.filter_by(id=id).first()
+    #else:
+    #    n = None 
+    return n
 
 @login_manager.request_loader
 def request_loader(request):
@@ -85,5 +103,34 @@ def request_loader(request):
     return user if user else None
 
 class OAuth(OAuthConsumerMixin, db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey("users.id", ondelete="cascade"), nullable=False)
     user = db.relationship(Users)
+
+class Users_Sessions (db.Model):
+
+    __tablename__ = 'users_sessions'
+
+    user_id       = db.Column(db.String(36), db.ForeignKey("users.id", ondelete="cascade"), nullable=False)
+    id            = db.Column(db.String(36), primary_key=True)
+    loggedon      = db.Column(db.DateTime, unique=False)
+    ip_address    = db.Column(db.String(16), unique=False)
+    platform      = db.Column(db.String(16), unique=False)
+    browser       = db.Column(db.String(16), unique=False)
+    version       = db.Column(db.String(16), unique=False)
+
+    
+    @classmethod
+    def find_by_id(cls, _id) -> "Users":
+        return cls.query.filter_by(id=_id).first()
+   
+    def save(self) -> None:
+        #try:
+            db.session.add(self)
+            db.session.commit()
+          
+        #except exc.SQLAlchemyError as e:
+        #    db.session.rollback()
+        #    db.session.close()
+        #    error = str(e.__dict__['orig'])
+        #    raise exc.InvalidUsage(error, 422)
+    

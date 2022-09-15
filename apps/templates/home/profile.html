@@ -22,14 +22,17 @@
                                         <div class="card-header">
                                             <h5>Edit Info</h5>
                                         </div>
+                                        <form role="form" name="profile" method="post" action="">
+                                            {{ form.hidden_tag() }}                    
+
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label for="exampleInputUsername">Username</label>
-                                                        <input class="form-control" id="exampleInputUsername" readonly 
+                                                        <input class="form-control" id="username_profile" readonly 
                                                                value="{{ current_user.username }}"
-                                                               aria-describedby="userHelp" placeholder="Enter email">
+                                                               aria-describedby="userHelp" placeholder="Enter username">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
@@ -38,7 +41,7 @@
                                                                for="exampleInputEmail1">Email address</label>
                                                         <input type="email"
                                                                {% if current_user.email %} readonly value="{{ current_user.email }}" {% endif %}  
-                                                               class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                                               class="form-control" id="email_profile" aria-describedby="emailHelp" placeholder="Enter email">
                                                         {% if not current_user.email %}       
                                                             <small id="emailHelp" class="form-text text-danger">
                                                                 You don't have an email address associated with this account.
@@ -49,13 +52,13 @@
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label for="fn">First Name</label>
-                                                        <input type="email" class="form-control" id="fn" aria-describedby="emailHelp" placeholder="Your name">
+                                                        {{ form.firstN(placeholder="First Name", value=current_user.firstname, class="form-control") }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label for="ln">Last Name</label>
-                                                        <input type="email" class="form-control" id="ln" aria-describedby="emailHelp" placeholder="Your last name">
+                                                        {{ form.lastN(placeholder="Last Name", value=current_user.lastname, class="form-control") }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 mb-4">
@@ -81,6 +84,7 @@
                                                 
                                             </div>
                                         </div>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
