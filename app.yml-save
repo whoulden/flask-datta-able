@@ -1,0 +1,21 @@
+#app.yaml
+runtime: python39
+
+
+env_variables:
+  CLOUD_SQL_USERNAME: YOUR-DB-USERNAME
+  CLOUD_SQL_PASSWORD: YOUR-DB-PASSWORD
+  CLOUD_SQL_DATABASE_NAME: YOUR-DB-NAME
+  CLOUD_SQL_CONNECTION_NAME: YOUR-CONN-NAME
+
+# True for development, False for production
+  DEBUG: False
+
+# Flask ENV
+  FLASK_APP: run.py
+  SECRET_KEY: YOUR_SUPER_KEY
+
+# Used for CDN (in production)
+# No Slash at the end
+  ASSETS_ROOT: /static/assets
+
