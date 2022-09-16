@@ -13,8 +13,10 @@ class Config(object):
     # SECRET_KEY = config('SECRET_KEY'  , default='S#perS3crEt_007')
     SECRET_KEY = os.getenv('SECRET_KEY', 'S#perS3crEt_007')
 
-    # This will create a file in <app> FOLDER
+    # SQL Lite This will create a file in <app> FOLDER
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+
+    # BIGQuery Implementation
     SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
@@ -43,15 +45,19 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_DURATION = 3600
 
+    # BIGQuery Implementation
+    SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False 
+
     # PostgreSQL database
-    SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
-        os.getenv('DB_ENGINE'   , 'mysql'),
-        os.getenv('DB_USERNAME' , 'appseed_db_usr'),
-        os.getenv('DB_PASS'     , 'pass'),
-        os.getenv('DB_HOST'     , 'localhost'),
-        os.getenv('DB_PORT'     , 3306),
-        os.getenv('DB_NAME'     , 'appseed_db')
-    ) 
+    # SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
+    #    os.getenv('DB_ENGINE'   , 'mysql'),
+    #    os.getenv('DB_USERNAME' , 'appseed_db_usr'),
+    #    os.getenv('DB_PASS'     , 'pass'),
+    #    os.getenv('DB_HOST'     , 'localhost'),
+    #    os.getenv('DB_PORT'     , 3306),
+    #    os.getenv('DB_NAME'     , 'appseed_db')
+    #) 
 
 class DebugConfig(Config):
     DEBUG = True
