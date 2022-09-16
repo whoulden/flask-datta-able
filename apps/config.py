@@ -38,6 +38,7 @@ class Config(object):
          SOCIAL_AUTH_GITHUB  = True
 
 class ProductionConfig(Config):
+    
     DEBUG = False
 
     # Security
@@ -46,6 +47,7 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_DURATION = 3600
 
     # BIGQuery Implementation
+    basedir = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
