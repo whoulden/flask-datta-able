@@ -15,7 +15,7 @@ class Config(object):
 
     # This will create a file in <app> FOLDER
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
-    SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/pbts' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
+    SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
     # Google Authentication
