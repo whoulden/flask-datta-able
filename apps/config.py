@@ -48,7 +48,7 @@ class ProductionConfig(Config):
 
     # BIGQuery Implementation
     basedir = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
+    SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' 
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
     # PostgreSQL database
