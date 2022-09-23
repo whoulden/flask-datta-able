@@ -20,6 +20,16 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'bigquery://pbts-ai/score' '?' 'credentials_path=' + os.path.join(basedir, 'bq-pbts-ai.json')
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
+    SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
+        os.getenv('DB_ENGINE'   , 'postgresql+pg8000'),
+        os.getenv('DB_USERNAME' , 'appseed_db_usr'),
+        os.getenv('DB_PASS'     , 'pass'),
+        os.getenv('DB_HOST'     , 'localhost'),
+        os.getenv('DB_PORT'     , 3306),
+        os.getenv('DB_NAME'     , 'appseed_db')
+    ) 
+
+
     # Google Authentication
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", '158772789153-lorcgam41b9je27csg5lf3u4mdhg9npj.apps.googleusercontent.com')
     GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", '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')
@@ -52,14 +62,14 @@ class ProductionConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
     # PostgreSQL database
-    # SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
-    #    os.getenv('DB_ENGINE'   , 'mysql'),
-    #    os.getenv('DB_USERNAME' , 'appseed_db_usr'),
-    #    os.getenv('DB_PASS'     , 'pass'),
-    #    os.getenv('DB_HOST'     , 'localhost'),
-    #    os.getenv('DB_PORT'     , 3306),
-    #    os.getenv('DB_NAME'     , 'appseed_db')
-    #) 
+    SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
+        os.getenv('DB_ENGINE'   , 'postgresql+pg8000'),
+        os.getenv('DB_USERNAME' , 'appseed_db_usr'),
+        os.getenv('DB_PASS'     , 'pass'),
+        os.getenv('DB_HOST'     , 'localhost'),
+        os.getenv('DB_PORT'     , 3306),
+        os.getenv('DB_NAME'     , 'appseed_db')
+    ) 
 
 class DebugConfig(Config):
     DEBUG = True

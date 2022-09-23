@@ -23,4 +23,11 @@ vendor==0.1
 requests==2.25.1
 requests-oauthlib==1.3.0
 sqlalchemy-bigquery
+pg8000==1.29.1
 # flask_mysqldb
+flask_migrate
+flask_minify 
+flask_login
+flask_dance
+blinker
+flask_wtf
